@@ -1,4 +1,6 @@
 * {
+  padding: 2px;
+  margin: 0;
   box-sizing: border-box;
 }
 @font-face {
@@ -13,6 +15,7 @@ html,
 body {
   font-family: "Roobert";
   overflow: hidden;
+  box-sizing: border-box;
 }
 .nav__wrapper {
   display: flex;
@@ -156,7 +159,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
+  transform: translate(-50%, -50%);
   padding: 24px;
   font-family: "Roobert";
 }
@@ -177,7 +180,7 @@ body {
   border: none;
   border-bottom: 2px solid gray;
   text-align: center;
-  font-size: 38px;
+  font-size: 28px;
 }
 .form__input:focus {
   outline: none;
@@ -216,7 +219,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
+  transform: translate(-50%, -50%);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -246,12 +249,272 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
+/* RESULT PAGE */
+
+.result__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 90vh;
+  position: relative;
+}
+.camera__wrapper,
+.gallery__wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+}
+.design__wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 75vh;
+  z-index: -1;
+}
+.magic__box {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  border: 3px dotted #a0a4ab;
+  animation: spin 50s infinite linear;
+}
+.magic__box.no-animation {
+  animation: none;
+  transform: rotate(-45deg);
+}
+.magic__box.magic__box--hover {
+  opacity: 0.3;
+  transition: opacity 500ms ease-in-out;
+}
+/* .magic__box.magic__box--hover:hover{ 
+  opacity: 1;
+  transition: all 2ms ease-in-out;
+} */
+.preview__wrapper {
+  position: absolute;
+  top: 0;
+  left: 80%;
+  width: 70%;
+  height: 70%;
+}
+.preview__image {
+  width: 150px;
+  height: 150px;
+  border: 1px dotted #a0a4ab;
+}
+.preview__image--base64 {
+  width: 150px;
+  height: 150px;
+}
+.preview__message {
+  font-family: "Roobert";
+}
+.option__wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: 3;
+  grid-template-rows: 3;
+  font-family: "RoobertSemiBold";
+  font-size: 20px;
+}
+.demographic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column-start: 2;
+  grid-row-start: 1;
+  /* border: 2px dotted #a0a4ab; */
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+}
+.demographic__border {
+  position: absolute;
+  height: 150px;
+  width: 150px;
+  background-color: #e6e8ec;
+  transform: rotate(-45deg);
+  z-index: -5;
+  cursor: pointer;
+}
+.demographic:hover {
+  transform: scale(0.9);
+  transition: all 750ms ease-in-out;
+}
+/* .demographic__link{
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+} */
+.cosmetics {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-row-start: 2;
+  grid-column-start: 1;
+  z-index: 10;
+  cursor: no-drop;
+}
+.weather {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column-start: 2;
+  grid-row-start: 3;
+  z-index: 10;
+  cursor: no-drop;
+}
+.skin__type {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-row-start: 2;
+  grid-column-start: 3;
+  z-index: 10;
+  cursor: no-drop;
+}
+
+/* Summary Title */
+
+.summary__wrapper {
+  /* display: flex;
+  justify-content: center;
+  align-items: start; */
+  width: 100%;
+  height: 80vh;
+  /* border: 2px solid red; */
+  padding: 24px 32px;
+}
+.summary__heading--h4 {
+  font-family: "RoobertSemiBold";
+  font-size: 32px;
+}
+.summary__heading--h1 {
+  font-family: "Roobert";
+  font-size: 54px;
+}
+.summary__heading--para {
+  font-family: "RoobertSemiBold";
+  letter-spacing: 8px;
+}
+.summary__detail--wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.summary__first {
+  width: calc(100% / 6);
+  height: 60vh;
+  border-top: 1px dotted black;
+}
+.summary__graphics {
+  width: calc(100% / 2);
+  height: 60vh;
+  /* border: 2px solid black; */
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  background-color: #F3F3F4;
+  border-top: 1px dotted black;
+}
+.summary__third {
+  width: calc(100% / 3);
+  height: 60vh;
+  border-top: 1px dotted black;
+  background-color: #F3F3F4;
+}
+.race__box.active{
+  background-color: black;
+  color: #a0a4ab;
+}
+.box{
+  width: 200px;
+  height: 150px;
+  padding: 24px 32px;
+  margin: 16px;
+  /* border: 2px solid black; */
+  background-color: #F3F3F4;
+}
+.box:hover{
+  background-color: #E1E1E2;
+}
+/* .box:active{
+  background-color: black;
+  
+} */
+.summary__graphics--h1{
+  font-family: 'RoobertSemiBold';
+  padding: 24px 32px;
+  font-size: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.graph{
+  width: 350px;
+  height: 350px;
+  border: 5px solid black;
+  background-color: transparent;
+  border-radius: 50%;
+  position: relative;
+}
+.graph__percentage{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.summary__third--heading{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.summary__third--h1{
+  font-weight: 300;
+  letter-spacing: 2px;
+  padding: 16px 16px;
+}
+.list__summary--details{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 16px;
+  border: 1px solid black;
+}
+/* .diamond__icon{
+  filter: invert(1);
+} */
 @keyframes spin {
   0% {
     transform: rotate(0);

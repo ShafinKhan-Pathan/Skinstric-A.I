@@ -3,22 +3,37 @@ import BackBtn from "./UI/BackBtn";
 import ProceedBtn from "./UI/ProceedBtn";
 import { faDiamond } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
+import { useState } from "react";
+
+const findTopPrediction = (predictions) => {
+  if (!predictions || Object.keys(predictions).length === 0) return;
+  const predictedArray = Object.entries(predictions);
+  predictedArray.sort((a, b) => b[1] - a[1]);
+  return predictedArray[0][0];
+};
 
 const Summary = () => {
   const location = useLocation();
   const resultData = location.state?.apiResult;
-  //   Convert Object data to arrays
-  const age = Object.entries(resultData.data.age);
-  const race = Object.entries(resultData.data.race);
-  const gender = Object.entries(resultData.data.gender);
-  console.log(race);
-  age.sort((a, b) => b[1] - a[1]);
-  race.sort((a, b) => b[1] - a[1]);
-  gender.sort((a, b) => b[1] - a[1]);
-  const topAgePrediction = age[0];
-  const topRacePrediction = race[0];
-  const topGenderPrediction = gender[0];
-  console.log("This is the testing ", resultData);
+  const [activeCategory, setActiveCategory] = useState("race");
+  const handleFinishProcess = () => {
+    sessionStorage.removeItem("Previous Uploaded Image");
+  };
+  let dataDisplay = {};
+  if (activeCategory === "race") {
+    dataDisplay = resultData.data.race;
+  } else if (activeCategory === "age") {
+    dataDisplay = resultData.data.age;
+  } else {
+    dataDisplay = resultData.data.gender;
+  }
+  const sortedDisplayData = Object.entries(dataDisplay).sort(
+    (a, b) => b[1] - a[1]
+  );
+  const topPrediction =
+    sortedDisplayData.length > 0 ? sortedDisplayData[0] : ["NA"[0]];
+  const percentageValue = Math.round(topPrediction[1] * 100);
+
   return (
     <section>
       <div className="summary__wrapper">
@@ -29,42 +44,72 @@ const Summary = () => {
         </div>
         <div className="summary__detail--wrapper">
           <div className="summary__first">
-            <div className="race__box box">
-              <p>{topRacePrediction[0].toUpperCase()}</p>
+            <div
+              onClick={() => setActiveCategory("race")}
+              className={`race__box ${
+                activeCategory === "race" ? "active" : ""
+              } box`}
+            >
+              <p>{findTopPrediction(resultData.data.race).toUpperCase()}</p>
               <h1>RACE</h1>
             </div>
-            <div className="age__box box">
+            <div
+              onClick={() => setActiveCategory("age")}
+              className={`age__box ${
+                activeCategory === "age" ? "active" : ""
+              } box`}
+            >
               <p>Age</p>
-              <h1>{topAgePrediction[0]}</h1>
+              <h1>{findTopPrediction(resultData.data.age).toUpperCase()}</h1>
             </div>
-            <div className="gender__box box">
-              <p>{topGenderPrediction[0].toUpperCase()}</p>
+            <div
+              onClick={() => setActiveCategory("gender")}
+              className={`gender__box ${
+                activeCategory === "gender" ? "active" : ""
+              } box`}
+            >
+              <p>{findTopPrediction(resultData.data.gender).toUpperCase()}</p>
               <h1>Gender</h1>
             </div>
           </div>
           <div className="summary__graphics">
-            <h1 className="summary__graphics--h1">
-              {topRacePrediction[0].toUpperCase()}
+            <h1 className={`summary__graphics--h1`}>
+              {activeCategory === "age" ? (
+                <>{topPrediction[0].toUpperCase()} Y.O</>
+              ) : (
+                <>{topPrediction[0].toUpperCase()}</>
+              )}
             </h1>
-            <div className="graph">
-              <h1 className="graph__percentage">
-                {Math.round(topRacePrediction[1] * 100)}%
-              </h1>
+            <div
+              className="graph"
+              style={{ "--percentage": `${percentageValue}%` }}
+            >
+              <h1 className="graph__percentage">{percentageValue}%</h1>
             </div>
+            <h4 className="note__message">
+              AI prediction not quite right?
+              <br /> Try again with a different photo for a better result.
+            </h4>
           </div>
           <div className="summary__third">
             <div className="summary__third--heading">
-              <h1 className="summary__third--h1">RACE</h1>
+              <h1 className="summary__third--h1">
+                {activeCategory.toUpperCase()}
+              </h1>
               <h1 className="summary__third--h1">A.I. CONFIDENCE</h1>
             </div>
-            {race.map((getRace) => (
-              <div className="list__summary--details">
+            {sortedDisplayData.map(([name, confidence]) => (
+              <div
+                className={`list__summary--details ${
+                  name === topPrediction[0] ? "active" : ""
+                }`}
+              >
                 <p className="list__summary">
                   <FontAwesomeIcon className="diamond__icon" icon={faDiamond} />{" "}
-                  {getRace[0].toUpperCase()}
+                  {name.toUpperCase()}
                 </p>
                 <p className="list__summary--percentage">
-                  {Math.round(getRace[1] * 100)}%
+                  {Math.round(confidence * 100)}%
                 </p>
               </div>
             ))}
@@ -72,8 +117,12 @@ const Summary = () => {
         </div>
       </div>
 
-      <BackBtn message="BACK" source="/resultinfo" />
-      <ProceedBtn message="END SUMMARY" source="/" />
+      <BackBtn message="BACK" source="/result" />
+      <ProceedBtn
+        message="END SUMMARY"
+        source="/"
+        onClick={handleFinishProcess}
+      />
     </section>
   );
 };

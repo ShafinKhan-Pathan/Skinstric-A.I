@@ -1,10 +1,8 @@
-import { Link } from "react-router-dom";
-import LeftIcon from "/icons/LeftIcon.png";
-import RightIcon from "/icons/RightIcon.png";
+
 import cameraLens from "/icons/camera.png";
 import gallery from "/icons/gallery.png";
 import MagicBox from "./UI/MagicBox";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { getUploadedImage } from "../services/api";
 import LoadingState from "./UI/LoadingState";
 import SubmittionMessage from "./UI/SubmittionMessage";
@@ -12,14 +10,13 @@ import BackBtn from "./UI/BackBtn";
 import ProceedBtn from "./UI/ProceedBtn";
 const Result = () => {
   const fileInputRef = useRef(null);
-  const [base64Image, setBase64Image] = useState("");
+  const [base64Image, setBase64Image] = useState(() => sessionStorage.getItem('Previous Uploaded Image')|| "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [finalData, setFinalData] = useState(null);
   const handleImageClick = () => {
     fileInputRef.current.click();
   };
-  // Convert Image format to BASE64
   const convertFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -28,6 +25,7 @@ const Result = () => {
       reader.onloadend = () => {
         const base64URL = reader.result;
         setBase64Image(base64URL);
+        sessionStorage.setItem('Previous Uploaded Image', base64URL)
         getUploadedImageData(base64URL);
       };
     }
@@ -39,7 +37,7 @@ const Result = () => {
     setLoading(true);
     try {
       const convertedImage = { image: base64Image };
-      const  resultData  = await getUploadedImage(convertedImage);
+      const resultData = await getUploadedImage(convertedImage);
       console.log(resultData);
       setFinalData(resultData);
     } catch (error) {
@@ -56,14 +54,14 @@ const Result = () => {
       {!loading && !error && !finalData && (
         <div className="result__wrapper">
           <div className="camera__wrapper">
-            <MagicBox />
+            <MagicBox isAnimated={true}/>
             <img src={cameraLens} alt="Image Upload From gallery" />
             <div className="message">
               <p>ALLOW A.I. TO SCAN YOUR FACE</p>
             </div>
           </div>
           <div className="gallery__wrapper">
-            <MagicBox />
+            <MagicBox isAnimated={true}/>
             <input
               type="file"
               ref={fileInputRef}
@@ -98,7 +96,7 @@ const Result = () => {
       )}
       {finalData && !loading && !error && (
         <>
-          <MagicBox />
+          <MagicBox isAnimated={true}/>
           <SubmittionMessage
             greeting="Your Image Is analyzed.."
             message="Proceed to check the result"
@@ -108,20 +106,28 @@ const Result = () => {
       <div className="back__btn">
         <BackBtn message="BACK" source="/testing" />
         {finalData && !loading && !error && (
-          <>            <div className="preview__wrapper">
-              <p className="preview__message">Preview</p>
+          <>
+            {" "}
+            <div className="preview__wrapper">
+              <div className="analyzed__preview--img">
+                <p className="preview__message">Preview</p>
 
-              <div className="preview__image">
-                {base64Image && (
-                  <img
-                    className="preview__image--base64"
-                    src={base64Image}
-                    alt="Preview_Image"
-                  />
-                )}
+                <div className="preview__image">
+                  {base64Image && (
+                    <img
+                      className="preview__image--base64"
+                      src={base64Image}
+                      alt="Preview_Image"
+                    />
+                  )}
+                </div>
               </div>
             </div>
-          <ProceedBtn message="PROCEED" source="/resultinfo" resultData={finalData} />
+            <ProceedBtn
+              message="PROCEED"
+              source="/resultinfo"
+              resultData={finalData}
+            />
           </>
         )}
       </div>

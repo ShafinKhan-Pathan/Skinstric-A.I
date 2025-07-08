@@ -1,18 +1,29 @@
-import React from "react";
 import MagicBox from "./UI/MagicBox";
 import BackBtn from "./UI/BackBtn";
 import ProceedBtn from "./UI/ProceedBtn";
-import {  Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ResultInfo = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const resultData = location.state?.apiResult;
-  if (!resultData) {
-    <section style={{ textAlign: 'center', padding: '50px' }}>
+  const navigateToSummary = () => {
+    if (resultData) {
+      navigate("/summary", { state: { apiResult: resultData } });
+    } else {
+      <section style={{ textAlign: "center", padding: "50px" }}>
         <h1>No Data Found</h1>
         <p>Please start the analysis from the beginning.</p>
         <Link to="/result">Go Back</Link>
-      </section>
+      </section>;
+    }
+  };
+  if (!resultData) {
+    <section style={{ textAlign: "center", padding: "50px" }}>
+      <h1>No Data Found</h1>
+      <p>Please start the analysis from the beginning.</p>
+      <Link to="/result">Go Back</Link>
+    </section>;
   }
   return (
     <section>
@@ -21,7 +32,7 @@ const ResultInfo = () => {
       <h4>FIX ESTIMATED INFORMATION IF NEEDED</h4>
       <MagicBox isAnimated={false} isHover={true} />
       <div className="option__wrapper">
-        <div className="demographic">
+        <div className="demographic" onClick={navigateToSummary}>
           <div className="demographic__border"></div>
           <p>Demographic</p>
         </div>

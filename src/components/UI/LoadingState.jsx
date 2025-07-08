@@ -5,7 +5,7 @@ import MagicBox from "./MagicBox";
 const LoadingState = ({message}) => {
   return (
     <div className="loading__info">
-        <MagicBox />
+        <MagicBox isAnimated={true}/>
       <h1>{message}</h1>
       <FontAwesomeIcon icon={faSpinner} className="spinner" />
     </div>

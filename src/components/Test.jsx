@@ -55,7 +55,7 @@ const Test = () => {
         {loading && <LoadingState message="Processing information..." />}
         {!loading && !error && (
           <>
-            <MagicBox />
+            <MagicBox isAnimated={true} />
             {step === "name" && (
               <form
                 className="form__analysis"
@@ -130,8 +130,10 @@ const Test = () => {
           </>
         )}
 
-        <BackBtn message="BACK" source="/"/>
-        {step === "submitted" && <ProceedBtn message="PROCEED" source="/result" />}
+        <BackBtn message="BACK" source="/" />
+        {step === "submitted" && (
+          <ProceedBtn message="PROCEED" source="/result" />
+        )}
       </div>
     </section>
   );

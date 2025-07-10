@@ -12,7 +12,7 @@
   src: url("./fonts/RoobertSemiBold.otf");
 }
 @property --percentage {
-  syntax: '<percentage>';
+  syntax: "<percentage>";
   inherits: false;
   initial-value: 0%;
 }
@@ -283,6 +283,111 @@ body {
   flex-direction: column;
   gap: 16px;
 }
+.camera__access--message {
+  background-color: black;
+  color: #a0a4ab;
+  padding: 16px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease-in-out;
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.camera__access--message.visible {
+  background-color: black;
+  color: #a0a4ab;
+  padding: 16px;
+  text-align: center;
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.5s ease-in-out;
+}
+.camera__access--message p {
+  padding-bottom: 24px;
+  border-bottom: 2px solid #a0a4ab;
+}
+.camera__access--message button {
+  margin: 8px;
+  width: 30%;
+}
+.camera__view--container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #333;
+  z-index: 1000;
+}
+.camera__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.camera__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+  color: white;
+  font-family: "RoobertSemiBold";
+}
+.camera__instructions {
+  color: white;
+  font-family: "RoobertSemiBold";
+  display: flex;
+  gap: 16px;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.camera__click--btn {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #e8eaee;
+  cursor: pointer;
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+.camera__icon {
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+}
+.camera__close--btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  gap: 8px;
+  background: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+  top: 90%;
+  left: 5%;
+  backdrop-filter: blur(100px);
+}
 .design__wrapper {
   position: absolute;
   top: 50%;
@@ -445,7 +550,6 @@ body {
   width: calc(100% / 6);
   height: 60vh;
   border-top: 1px dotted black;
-  
 }
 .summary__graphics {
   width: calc(100% / 2);
@@ -471,7 +575,6 @@ body {
   background-color: black;
   color: #a0a4ab;
   transition: background-color 500ms ease-in-out;
-  
 }
 .box {
   width: 200px;

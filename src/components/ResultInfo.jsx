@@ -8,15 +8,7 @@ const ResultInfo = () => {
   const navigate = useNavigate();
   const resultData = location.state?.apiResult;
   const navigateToSummary = () => {
-    if (resultData) {
-      navigate("/summary", { state: { apiResult: resultData } });
-    } else {
-      <section style={{ textAlign: "center", padding: "50px" }}>
-        <h1>No Data Found</h1>
-        <p>Please start the analysis from the beginning.</p>
-        <Link to="/result">Go Back</Link>
-      </section>;
-    }
+    navigate("/summary", { state: { apiResult: resultData } });
   };
   if (!resultData) {
     <section style={{ textAlign: "center", padding: "50px" }}>
@@ -30,13 +22,12 @@ const ResultInfo = () => {
       <h1>A.I. ANALYSIS</h1>
       <h4>A.I. HAS ESTIMATED THE FOLLOWING.</h4>
       <h4>FIX ESTIMATED INFORMATION IF NEEDED</h4>
-      <MagicBox isAnimated={false} isHover={true} />
+      <MagicBox isAnimated={false} />
       <div className="option__wrapper">
         <div className="demographic" onClick={navigateToSummary}>
           <div className="demographic__border"></div>
           <p>Demographic</p>
         </div>
-
         <div className="cosmetics">
           <p>
             Cosmetics <br />

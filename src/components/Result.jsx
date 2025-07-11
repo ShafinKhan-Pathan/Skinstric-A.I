@@ -10,7 +10,6 @@ import ProceedBtn from "./UI/ProceedBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faLeftLong } from "@fortawesome/free-solid-svg-icons";
 const Result = () => {
-  const [backbtn, setBackBtn] = useState("notactive");
   // Which view we are showing Camera or options
   const [view, setView] = useState("options");
   // Permission Pop up for camera
@@ -33,7 +32,6 @@ const Result = () => {
   };
   const handleCameraClick = () => {
     setActiveClick("active");
-    console.log("You clicked");
   };
   const convertFileChange = (e) => {
     const file = e.target.files[0];
@@ -56,7 +54,6 @@ const Result = () => {
     try {
       const convertedImage = { image: base64Image };
       const resultData = await getUploadedImage(convertedImage);
-      console.log(resultData);
       setFinalData(resultData);
     } catch (error) {
       setError("Failed to submit. Please try again");
@@ -76,7 +73,7 @@ const Result = () => {
       setStream(mediaStream);
       setView("camera");
     } catch (error) {
-      console.error("Error accessing camera:", error);
+      // console.error("Error accessing camera:", error);
       setError("Camera Permission denied", error);
     }
   };
@@ -113,9 +110,24 @@ const Result = () => {
   }, [stream]);
   return (
     <section>
-      <h1>T0 START ANALYSIS</h1>
-      {view !== "camera" && (
-        <>{loading && <LoadingState message="Analyzing the image" />}</>
+      <h1 className="title__heading">T0 START ANALYSIS</h1>
+
+      <div className="preview__wrapper">
+        <p className="preview__message">Preview</p>
+
+        <div className="preview__image">
+          {base64Image && (
+            <img
+              className="preview__image--base64"
+              src={base64Image}
+              alt="Preview_Image"
+            />
+          )}
+        </div>
+      </div>
+
+      {view === "camera" && (
+        <>{loading && <LoadingState message="PREPARING YOUR ANALYSIS.." />}</>
       )}
       {view === "camera" && stream && (
         <>
@@ -132,10 +144,10 @@ const Result = () => {
               style={{ display: "none" }}
             />
             <div className="camera__overlay">
-              <p>TO GET BETTER RESULT MAKE SURE YOU HAVE</p>
+              <p className="camera__overlay--para">TO GET BETTER RESULT MAKE SURE YOU HAVE</p>
               <div className="camera__instructions">
-                <p>NEUTRAL EXPRESSION - </p>
-                <p>FRONTAL POSE - </p>
+                <p>NEUTRAL EXPRESSION</p>
+                <p>FRONTAL POSE</p>
                 <p>ADEQUATE LIGHTING</p>
               </div>
               TAKE PHOTO
@@ -161,6 +173,7 @@ const Result = () => {
                   onClick={handleCameraClick}
                   src={cameraLens}
                   alt="Image Upload From gallery"
+                  className="options__camera--img"
                 />
                 <div className="message">
                   <p>ALLOW A.I. TO SCAN YOUR FACE</p>
@@ -201,23 +214,10 @@ const Result = () => {
                       src={gallery}
                       alt="Upload Gallery Image"
                       onClick={handleImageClick}
-                      style={{ cursor: "pointer" }}
+                      className="options__camera--img"
                     />
                     <div className="message">
                       <p>ALLOW A.I. TO ACCESS GALLERY</p>
-                    </div>
-                    <div className="preview__wrapper">
-                      <p className="preview__message">Preview</p>
-
-                      <div className="preview__image">
-                        {base64Image && (
-                          <img
-                            className="preview__image--base64"
-                            src={base64Image}
-                            alt="Preview_Image"
-                          />
-                        )}
-                      </div>
                     </div>
                   </div>
                 </>
@@ -236,97 +236,14 @@ const Result = () => {
                       src={gallery}
                       alt="Upload Gallery Image"
                       onClick={handleImageClick}
-                      style={{ cursor: "pointer" }}
+                      className="options__camera--img"
                     />
                     <div className="message">
                       <p>ALLOW A.I. TO ACCESS GALLERY</p>
                     </div>
-                    <div className="preview__wrapper">
-                      <p className="preview__message">Preview</p>
-
-                      <div className="preview__image">
-                        {base64Image && (
-                          <img
-                            className="preview__image--base64"
-                            src={base64Image}
-                            alt="Preview_Image"
-                          />
-                        )}
-                      </div>
-                    </div>
                   </div>
                 </>
               )}
-              {/* <div className="gallery__wrapper">
-            
-              <div style={{ opacity: '0.4', pointerEvents:"none", transition:"opacity 1s" }}>
-                <MagicBox isAnimated={true} />
-                
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={convertFileChange}
-                    style={{ display: "none" }}
-                    accept="image/*"
-                  />
-                  <img
-                    src={gallery}
-                    alt="Upload Gallery Image"
-                    onClick={handleImageClick}
-                    style={{ cursor: "pointer" }}
-                  />
-                  <div className="message">
-                    <p>ALLOW A.I. TO ACCESS GALLERY</p>
-                  </div>
-                  <div className="preview__wrapper">
-                    <p className="preview__message">Preview</p>
-
-                    <div className="preview__image">
-                      {base64Image && (
-                        <img
-                          className="preview__image--base64"
-                          src={base64Image}
-                          alt="Preview_Image"
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              
-            
-                <MagicBox isAnimated={true} />
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={convertFileChange}
-                  style={{ display: "none" }}
-                  accept="image/*"
-                />
-                <img
-                  src={gallery}
-                  alt="Upload Gallery Image"
-                  onClick={handleImageClick}
-                  style={{ cursor: "pointer" }}
-                />
-                <div className="message">
-                  <p>ALLOW A.I. TO ACCESS GALLERY</p>
-                </div>
-                <div className="preview__wrapper">
-                  <p className="preview__message">Preview</p>
-
-                  <div className="preview__image">
-                    {base64Image && (
-                      <img
-                        className="preview__image--base64"
-                        src={base64Image}
-                        alt="Preview_Image"
-                      />
-                    )}
-                  </div>
-                </div>
-             
-           
-          </div> */}
             </div>
           )}
         </>
@@ -336,7 +253,7 @@ const Result = () => {
         <>
           <MagicBox isAnimated={true} />
           <SubmittionMessage
-            greeting="Your Image Is analyzed.."
+            greeting="IMAGE ANALYZED SUCCESSFULLY"
             message="Proceed to check the result"
           />
         </>
@@ -344,29 +261,11 @@ const Result = () => {
       <div className="back__btn">
         <BackBtn message="BACK" source="/testing" />
         {finalData && !loading && !error && (
-          <>
-            {" "}
-            <div className="preview__wrapper">
-              <div className="analyzed__preview--img">
-                <p className="preview__message">Preview</p>
-
-                <div className="preview__image">
-                  {base64Image && (
-                    <img
-                      className="preview__image--base64"
-                      src={base64Image}
-                      alt="Preview_Image"
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-            <ProceedBtn
-              message="PROCEED"
-              source="/resultinfo"
-              resultData={finalData}
-            />
-          </>
+          <ProceedBtn
+            message="PROCEED"
+            source="/resultinfo"
+            resultData={finalData}
+          />
         )}
       </div>
     </section>

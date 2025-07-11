@@ -25,7 +25,6 @@ const Test = () => {
     setStep("city");
   };
   const onCitySubmit = (data) => {
-    console.log(data);
     setFinalData((prevData) => ({ ...prevData, ...data }));
   };
   useEffect(() => {
@@ -36,7 +35,6 @@ const Test = () => {
       setLoading(true);
       try {
         const getConfirmationResult = await getConfirmation(finalData);
-        console.log(getConfirmationResult);
         setStep("submitted");
       } catch (error) {
         console.log("API Error", error);
@@ -93,7 +91,7 @@ const Test = () => {
                 onSubmit={handleSubmit(onCitySubmit)}
               >
                 <label className="form__label">
-                  Hi {watchFormId} Which City are you from ??
+                  Hi <span>{watchFormId}</span> Which City are you from ??
                 </label>
                 <input
                   id="location"

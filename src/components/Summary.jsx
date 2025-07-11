@@ -4,7 +4,7 @@ import ProceedBtn from "./UI/ProceedBtn";
 import { faDiamond } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-
+import { useMediaQuery } from "react-responsive";
 const findTopPrediction = (predictions) => {
   if (!predictions || Object.keys(predictions).length === 0) return;
   const predictedArray = Object.entries(predictions);
@@ -13,6 +13,7 @@ const findTopPrediction = (predictions) => {
 };
 
 const Summary = () => {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const location = useLocation();
   const resultData = location.state?.apiResult;
   const [activeCategory, setActiveCategory] = useState("race");
@@ -99,7 +100,7 @@ const Summary = () => {
               <h1 className="summary__third--h1">A.I. CONFIDENCE</h1>
             </div>
             {sortedDisplayData.map(([name, confidence]) => (
-              <div
+              <div key={name}
                 className={`list__summary--details ${
                   name === topPrediction[0] ? "active" : ""
                 }`}
@@ -116,13 +117,27 @@ const Summary = () => {
           </div>
         </div>
       </div>
-
-      <BackBtn message="BACK" source="/result" />
-      <ProceedBtn
-        message="END SUMMARY"
-        source="/"
-        onClick={handleFinishProcess}
-      />
+      {isMobile ? (
+        <>
+          <div className="bottom__btn">
+            <BackBtn message="BACK" source="/result" />
+            <ProceedBtn
+              message="END SUMMARY"
+              source="/"
+              onClick={handleFinishProcess}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <BackBtn message="BACK" source="/result" />
+          <ProceedBtn
+            message="END SUMMARY"
+            source="/"
+            onClick={handleFinishProcess}
+          />
+        </>
+      )}
     </section>
   );
 };

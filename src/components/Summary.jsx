@@ -2,9 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BackBtn from "./UI/BackBtn";
 import ProceedBtn from "./UI/ProceedBtn";
 import { faDiamond } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 const findTopPrediction = (predictions) => {
   if (!predictions || Object.keys(predictions).length === 0) return;
   const predictedArray = Object.entries(predictions);
@@ -17,6 +19,13 @@ const Summary = () => {
   const location = useLocation();
   const resultData = location.state?.apiResult;
   const [activeCategory, setActiveCategory] = useState("race");
+  if (!resultData || !resultData.data) {
+    <section style={{ textAlign: "center", padding: "50px" }}>
+      <h1>No Data Found</h1>
+      <p>Please start the analysis from the beginning.</p>
+      <Link to="/result">Go Back</Link>
+    </section>;
+  }
   const handleFinishProcess = () => {
     sessionStorage.removeItem("Previous Uploaded Image");
   };
@@ -35,12 +44,44 @@ const Summary = () => {
     sortedDisplayData.length > 0 ? sortedDisplayData[0] : ["NA"[0]];
   const percentageValue = Math.round(topPrediction[1] * 100);
 
+  useGSAP(() => {
+    gsap.from(".summary__heading--h4", {
+      opacity: 0,
+      x: 100,
+      duration: 0.5,
+      delay: 0.5,
+      ease: "power3.out",
+    });
+    gsap.from(".summary__heading--para", {
+      opacity: 0,
+      x: 100,
+      duration: 0.5,
+      delay: 1,
+      ease: "power3.out",
+    });
+    gsap.from(".box", {
+      opacity: 0,
+      x: 100,
+      duration: 0.5,
+      stagger: 0.3,
+      ease: "power3.out",
+      clearProps: "transform",
+    });
+    gsap.from(".summary__graphics, .summary__third", {
+      opacity: 0,
+      y: 50,
+      duration: 0.5,
+      delay: 0.5,
+      stagger: 0.1,
+      ease: "power3.out",
+    });
+  }, []);
   return (
     <section>
       <div className="summary__wrapper">
         <div className="summary__heading">
           <h4 className="summary__heading--h4">A.I. ANALYSIS</h4>
-          <h1 className="summary__heading--h1">DEMOGRAPHICS</h1>
+          <h1 className="summary__heading--h1 animated__text">DEMOGRAPHICS</h1>
           <p className="summary__heading--para">PREDICTED RACE & AGE</p>
         </div>
         <div className="summary__detail--wrapper">
@@ -100,7 +141,8 @@ const Summary = () => {
               <h1 className="summary__third--h1">A.I. CONFIDENCE</h1>
             </div>
             {sortedDisplayData.map(([name, confidence]) => (
-              <div key={name}
+              <div
+                key={name}
                 className={`list__summary--details ${
                   name === topPrediction[0] ? "active" : ""
                 }`}

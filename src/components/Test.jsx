@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import RightIcon from "/icons/RightIcon.png";
-import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { getConfirmation } from "../services/api";
+import { submitPhaseOne } from "../services/api";
 import MagicBox from "./UI/MagicBox";
 import LoadingState from "./UI/LoadingState";
 import SubmittionMessage from "./UI/SubmittionMessage";
@@ -31,10 +29,10 @@ const Test = () => {
     if (!finalData.name || !finalData.location) {
       return;
     }
-    const getConfirmationData = async () => {
+    const getPhaseOneData = async () => {
       setLoading(true);
       try {
-        const getConfirmationResult = await getConfirmation(finalData);
+        const getPhaseOneDataResult = await submitPhaseOne(finalData);
         setStep("submitted");
       } catch (error) {
         console.log("API Error", error);
@@ -43,7 +41,7 @@ const Test = () => {
         setLoading(false);
       }
     };
-    getConfirmationData();
+    getPhaseOneData();
   }, [finalData]);
   return (
     <section>

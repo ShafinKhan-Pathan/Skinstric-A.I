@@ -2,7 +2,7 @@ import cameraLens from "/icons/camera.png";
 import gallery from "/icons/gallery.png";
 import MagicBox from "./UI/MagicBox";
 import { useEffect, useRef, useState } from "react";
-import { getUploadedImage } from "../services/api";
+import { submitPhaseTwo } from "../services/api";
 import LoadingState from "./UI/LoadingState";
 import SubmittionMessage from "./UI/SubmittionMessage";
 import BackBtn from "./UI/BackBtn";
@@ -53,7 +53,7 @@ const Result = () => {
     setLoading(true);
     try {
       const convertedImage = { image: base64Image };
-      const resultData = await getUploadedImage(convertedImage);
+      const resultData = await submitPhaseTwo(convertedImage);
       setFinalData(resultData);
     } catch (error) {
       setError("Failed to submit. Please try again");

@@ -8,10 +8,10 @@ import { useMediaQuery } from "react-responsive";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 const findTopPrediction = (predictions) => {
-  if (!predictions || Object.keys(predictions).length === 0) return;
+  if (!predictions || Object.keys(predictions).length === 0) return ["NA", 0];
   const predictedArray = Object.entries(predictions);
   predictedArray.sort((a, b) => b[1] - a[1]);
-  return predictedArray[0][0];
+  return predictedArray[0];
 };
 
 const Summary = () => {
@@ -19,12 +19,15 @@ const Summary = () => {
   const location = useLocation();
   const resultData = location.state?.apiResult;
   const [activeCategory, setActiveCategory] = useState("race");
+  const [userSelectedData, setuserSelectedData] = useState({});
   if (!resultData || !resultData.data) {
-    <section style={{ textAlign: "center", padding: "50px" }}>
-      <h1>No Data Found</h1>
-      <p>Please start the analysis from the beginning.</p>
-      <Link to="/result">Go Back</Link>
-    </section>;
+    return (
+      <section style={{ textAlign: "center", padding: "50px" }}>
+        <h1>No Data Found</h1>
+        <p>Please start the analysis from the beginning.</p>
+        <Link to="/result">Go Back</Link>
+      </section>
+    );
   }
   const handleFinishProcess = () => {
     sessionStorage.removeItem("Previous Uploaded Image");
@@ -42,8 +45,16 @@ const Summary = () => {
   );
   const topPrediction =
     sortedDisplayData.length > 0 ? sortedDisplayData[0] : ["NA"[0]];
-  const percentageValue = Math.round(topPrediction[1] * 100);
+  const userSelectedDataValue = userSelectedData[activeCategory];
+  const predictionToDisplay = userSelectedDataValue || topPrediction;
+  const percentageValue = Math.round(predictionToDisplay[1] * 100);
 
+  const raceBoxData =
+    userSelectedData.race || findTopPrediction(resultData.data.race);
+  const ageBoxData =
+    userSelectedData.age || findTopPrediction(resultData.data.age);
+  const genderBoxData =
+    userSelectedData.gender || findTopPrediction(resultData.data.gender);
   useGSAP(() => {
     gsap.from(".summary__heading--h4", {
       opacity: 0,
@@ -87,39 +98,47 @@ const Summary = () => {
         <div className="summary__detail--wrapper">
           <div className="summary__first">
             <div
-              onClick={() => setActiveCategory("race")}
+              onClick={() => {
+                setActiveCategory("race");
+              }}
               className={`race__box ${
                 activeCategory === "race" ? "active" : ""
               } box`}
             >
-              <p>{findTopPrediction(resultData.data.race).toUpperCase()}</p>
-              <h1>RACE</h1>
+              <h4>RACE</h4>
+              <h3>{raceBoxData[0].toUpperCase()}</h3>
             </div>
             <div
-              onClick={() => setActiveCategory("age")}
+              onClick={() => {
+                setActiveCategory("age");
+              }}
               className={`age__box ${
                 activeCategory === "age" ? "active" : ""
               } box`}
             >
-              <p>Age</p>
-              <h1>{findTopPrediction(resultData.data.age).toUpperCase()}</h1>
+              <h4>AGE</h4>
+              <h3>
+                {ageBoxData[0].toUpperCase()} Y.O
+              </h3>
             </div>
             <div
-              onClick={() => setActiveCategory("gender")}
+              onClick={() => {
+                setActiveCategory("gender");
+              }}
               className={`gender__box ${
                 activeCategory === "gender" ? "active" : ""
               } box`}
             >
-              <p>{findTopPrediction(resultData.data.gender).toUpperCase()}</p>
-              <h1>Gender</h1>
+              <h4>Gender</h4>
+              <h3>{genderBoxData[0].toUpperCase()}</h3>
             </div>
           </div>
           <div className="summary__graphics">
             <h1 className={`summary__graphics--h1`}>
               {activeCategory === "age" ? (
-                <>{topPrediction[0].toUpperCase()} Y.O</>
+                <>{predictionToDisplay[0].toUpperCase()} Y.O</>
               ) : (
-                <>{topPrediction[0].toUpperCase()}</>
+                <>{predictionToDisplay[0].toUpperCase()}</>
               )}
             </h1>
             <div
@@ -143,9 +162,16 @@ const Summary = () => {
             {sortedDisplayData.map(([name, confidence]) => (
               <div
                 key={name}
+                onClick={() =>
+                  setuserSelectedData((previousData) => ({
+                    ...previousData,
+                    [activeCategory]: [name, confidence],
+                  }))
+                }
                 className={`list__summary--details ${
-                  name === topPrediction[0] ? "active" : ""
+                  name === predictionToDisplay[0] ? "active" : ""
                 }`}
+                style={{ cursor: "pointer" }}
               >
                 <p className="list__summary">
                   <FontAwesomeIcon className="diamond__icon" icon={faDiamond} />{" "}
